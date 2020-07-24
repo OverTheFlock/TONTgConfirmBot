@@ -5,9 +5,6 @@ import config
 import time
 import datetime
 import subprocess
-import tty
-import pty
-import psutil
 import json
 import logging
 import threading
@@ -28,7 +25,7 @@ bot = telebot.TeleBot(config.TgBotAPIKey)
 
 # Log
 logger = telebot.logger
-telebot.logger.setLevel(logging.DEBUG) # Outputs Error messages to console.
+telebot.logger.setLevel(logging.ERROR) # Outputs Error messages to console.
 # /Log
 
 # Start
