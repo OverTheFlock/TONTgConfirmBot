@@ -17,8 +17,8 @@ tc=$(curl -s -L https://api.github.com/repos/tonlabs/tonos-cli/releases/latest |
 wget -qO- $tc | tar -zxvf -
 
 # abi & tvc 
-curl https://raw.githubusercontent.com/tonlabs/ton-labs-contracts/master/solidity/safemultisig/SafeMultisigWallet.abi.json --output SafeMultisigWallet.abi.json
-curl https://github.com/tonlabs/ton-labs-contracts/raw/master/solidity/safemultisig/SafeMultisigWallet.tvc --output SafeMultisigWallet.tvc
+wget https://raw.githubusercontent.com/tonlabs/ton-labs-contracts/master/solidity/safemultisig/SafeMultisigWallet.abi.json
+wget https://github.com/tonlabs/ton-labs-contracts/raw/master/solidity/safemultisig/SafeMultisigWallet.tvc
 
 iUser="$(whoami)"
 iGroup="$(id -gn)"
