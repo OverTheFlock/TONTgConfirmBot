@@ -43,12 +43,12 @@ if [ ! -f ./config.py ]; then
     # Tg bot api key
 
     # Wallet
-    printf "\n\n\nPlease, enter wallet for confirmation\n"
+    printf "\n\n\nPlease, enter wallet, who will create transactions\n"
     read -p 'Wallet: ' iwallet
     # Wallet
 
     # Seed phrase
-    printf "\n\n\nPlease, enter seed phrase for confirmation\n"
+    printf "\n\n\nPlease, enter seed phrase, who will confirm transactions. It's different from wallet seed phrase\n"
     read -p 'Seed phrase: ' iseed
     # Seed phrase
 fi
@@ -80,14 +80,14 @@ if [ -f ./config.py ]; then
     # Tg bot api key
 
     # Wallet
-    printf "\n\n\nPlease, confirm wallet\n"
+    printf "\n\n\nPlease, enter wallet, who will create transactions. Confirm wallet.\n"
     iwallet="$(grep 'wallet =' config.py | awk '{print $3}' | tr -d \')"
     read -e -i "$iwallet" -p "Wallet: " input
     iwallet="${input:-$iwallet}"
     # Wallet
 
     # Seed phrase
-    printf "\n\n\nPlease, enter seed phrase for confirmation\n"
+    printf "\n\n\nPlease, enter seed phrase, who will confirm transactions. It's different from wallet seed phrase. Confirm seed.\n"
     iseed="$(grep 'seed =' config.py | awk '{$1=$2="";print substr($0,3)}' | tr -d \')"
     read -e -i "$iseed" -p "Seed phrase:" input
     iseed="${input:-$iseed}"
