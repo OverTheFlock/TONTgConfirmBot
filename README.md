@@ -14,6 +14,12 @@ $ cd $HOME && git clone -v https://github.com/anvme/TONTgConfirmBot.git tontgcon
  ```sh
 $ /bin/bash ./install.sh
 ```
+## Update
+
+ 1. Run command below
+```sh
+$ cd $HOME && cd ./tontgconfirmbot && git pull && chmod +x ./install.sh && ./install.sh
+```
 
 ## Confirmation
 
