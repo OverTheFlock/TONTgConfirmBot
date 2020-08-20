@@ -13,12 +13,16 @@ IDDAT="$BOTDIRDB/id.dat"
 if [ ! -f $IDDAT ]; then
     touch $IDDAT
 fi
-tc=$(curl -s -L https://api.github.com/repos/tonlabs/tonos-cli/releases/latest | grep browser_download_url | cut -d '"' -f 4)
-wget -qO- $tc | tar -zxvf -
+#tc=$(curl -s -L https://api.github.com/repos/tonlabs/tonos-cli/releases/latest | grep browser_download_url | cut -d '"' -f 4)
+#wget -qO- $tc | tar -zxvf -
+wget -qO- https://github.com/tonlabs/tonos-cli/releases/download/v0.1.13/tonos-cli_v0.1.13_linux.tar.gz | tar -zxvf -
 
 # abi & tvc 
 wget https://raw.githubusercontent.com/tonlabs/ton-labs-contracts/master/solidity/safemultisig/SafeMultisigWallet.abi.json
 wget https://github.com/tonlabs/ton-labs-contracts/raw/master/solidity/safemultisig/SafeMultisigWallet.tvc
+#remove old abi & tvc
+rm SafeMultisigWallet.abi.json.*
+rm SafeMultisigWallet.tvc.*
 
 iUser="$(whoami)"
 iGroup="$(id -gn)"
@@ -51,6 +55,13 @@ if [ ! -f ./config.py ]; then
     printf "\n\n\nPlease, enter seed phrase, who will confirm transactions. It's different from wallet seed phrase\n"
     read -p 'Seed phrase: ' iseed
     # Seed phrase
+
+    # Trusted contact
+    printf "\n\n\nPlease, enter trusted contacts, for auto confirm transactions. Leave empty if not need.\n"
+    printf "Example: '0:123...abc','-1:abc...000','0:abc...555'\n"
+    printf "Without any spaces!\n"
+    read -p 'Trusted contacts: ' itcontact
+    # Trusted contact
 fi
 
 if [ -f ./config.py ]; then
@@ -92,6 +103,15 @@ if [ -f ./config.py ]; then
     read -e -i "$iseed" -p "Seed phrase:" input
     iseed="${input:-$iseed}"
     # Seed phrase
+
+    # Trusted contact
+    printf "\n\n\nPlease, enter trusted contacts, for auto confirm transactions. Leave empty if not need.\n"
+    printf "Example: '0:123...abc','-1:abc...000','0:abc...555'\n"
+    printf "Without any spaces!\n"
+    itcontact="$(grep 'tcontact =' config.py | awk '{print $3}' | tr -d \[])"
+    read -e -i "$itcontact" -p "Trusted contacts:" input
+    itcontact="${input:-$itcontact}"
+    # Trusted contact
 fi
 
 
@@ -109,7 +129,7 @@ tontgcpath = '$BOTDIR' # User folder with this bot.
 tontgcpathdb = '$BOTDIRDB' # User folder with bot database.
 seed = '$iseed'
 wallet = '$iwallet' # Wallet
-
+tcontact = [$itcontact] # Trusted contacts for autoconfirm. Example ['0:123...abc','-1:abc...000','0:abc...555']
 EOF
 # config.py
 

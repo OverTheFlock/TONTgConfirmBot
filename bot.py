@@ -55,8 +55,16 @@ def cnfrm(message):
       bot.send_message(config.tg, text="Confirmation error",parse_mode="Markdown")
 
 
-
-
+def autocnfrm(tdest,tid):
+  try:
+    confrmcmd = "cd " + config.tontgcpath + " && ./tonos-cli call " + config.wallet + " confirmTransaction '{\"transactionId\":\"" + tid + "\"}' --abi SafeMultisigWallet.abi.json --sign \"" + config.seed + "\""
+    confrmcmd = str(subprocess.check_output(confrmcmd, shell = True, encoding='utf-8',timeout=60))
+    if "Succeeded" in confrmcmd:
+      bot.send_message(config.tg, text="Auto Succeeded to " + tdest + "\nTransaction id:" + tid,parse_mode="Markdown")
+    else:
+      bot.send_message(config.tg, text="Auto confirmation error to " + tdest + "\nTransaction id:" + tid,parse_mode="Markdown")
+  except:
+    bot.send_message(config.tg, text="Auto confirmation error too " + tdest + "\nTransaction id:" + tid,parse_mode="Markdown")
 
 
 def NewTransMonitoring():
@@ -80,18 +88,20 @@ def NewTransMonitoring():
               pass
             else:
               with open(os.path.join(config.tontgcpathdb, "id.dat"), "a") as w:
-                bot.send_message(config.tg, text="*Creator:*" + tcreator + "\n*Destination:*" + tdest + "\n*ID:*" + tid + "\n*Value:*" + str(tvalue) + " \U0001F48E",parse_mode="Markdown")
-                w.write(tid + "\n")
-                w.close()
+                if tdest in config.tcontact:
+                  autocnfrm(tdest,tid)
+                  w.write(tid + "\n")
+                  w.close()
+                else:
+                  bot.send_message(config.tg, text="*Creator:*" + tcreator + "\n*Destination:*" + tdest + "\n*ID:*" + tid + "\n*Value:*" + str(tvalue) + " \U0001F48E",parse_mode="Markdown")
+                  w.write(tid + "\n")
+                  w.close()
       except:
         time.sleep(10)
         tmr += 10
     else:
       time.sleep(10)
       tmr += 10
-
-
-
 
 NewTransMonitoring = threading.Thread(target = NewTransMonitoring)
 NewTransMonitoring.start()
