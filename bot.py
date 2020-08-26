@@ -48,11 +48,11 @@ def cnfrm(message):
       confrmcmd = "cd " + config.tontgcpath + " && ./tonos-cli call " + config.wallet + " confirmTransaction '{\"transactionId\":\"" + trid + "\"}' --abi SafeMultisigWallet.abi.json --sign \"" + config.seed + "\""
       confrmcmd = str(subprocess.check_output(confrmcmd, shell = True, encoding='utf-8',timeout=60))
       if "Succeeded" in confrmcmd:
-        bot.send_message(config.tg, text="Succeeded",parse_mode="Markdown")
+        bot.send_message(config.tg, text="Succeeded " + trid,parse_mode="Markdown")
       else:
-        bot.send_message(config.tg, text="Confirmation error",parse_mode="Markdown")
+        bot.send_message(config.tg, text="Confirmation error " + trid,parse_mode="Markdown")
     except:
-      bot.send_message(config.tg, text="Confirmation error",parse_mode="Markdown")
+      bot.send_message(config.tg, text="Confirmation error " + trid,parse_mode="Markdown")
 
 def cnfrmbtn(tid):
   try:
@@ -62,9 +62,9 @@ def cnfrmbtn(tid):
     if "Succeeded" in confrmcmd:
       pass
     else:
-      bot.send_message(config.tg, text="Confirmation error",parse_mode="Markdown")
+      bot.send_message(config.tg, text="Confirmation error " + tid,parse_mode="Markdown")
   except:
-    bot.send_message(config.tg, text="Confirmation error",parse_mode="Markdown")
+    bot.send_message(config.tg, text="Confirmation error " + tid,parse_mode="Markdown")
 
 def autocnfrm(tdest,tid):
   try:
