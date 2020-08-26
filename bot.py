@@ -54,6 +54,17 @@ def cnfrm(message):
     except:
       bot.send_message(config.tg, text="Confirmation error",parse_mode="Markdown")
 
+def cnfrmbtn(tid):
+  try:
+    bot.send_chat_action(config.tg, "typing")
+    confrmcmd = "cd " + config.tontgcpath + " && ./tonos-cli call " + config.wallet + " confirmTransaction '{\"transactionId\":\"" + tid + "\"}' --abi SafeMultisigWallet.abi.json --sign \"" + config.seed + "\""
+    confrmcmd = str(subprocess.check_output(confrmcmd, shell = True, encoding='utf-8',timeout=60))
+    if "Succeeded" in confrmcmd:
+      pass
+    else:
+      bot.send_message(config.tg, text="Confirmation error",parse_mode="Markdown")
+  except:
+    bot.send_message(config.tg, text="Confirmation error",parse_mode="Markdown")
 
 def autocnfrm(tdest,tid):
   try:
@@ -93,7 +104,11 @@ def NewTransMonitoring():
                   w.write(tid + "\n")
                   w.close()
                 else:
-                  bot.send_message(config.tg, text="*Creator:*" + tcreator + "\n*Destination:*" + tdest + "\n*ID:*" + tid + "\n*Value:*" + str(tvalue) + " \U0001F48E",parse_mode="Markdown")
+                  ConfirmRejectKeyboard = types.InlineKeyboardMarkup()
+                  RejectBtn = types.InlineKeyboardButton(text= "\U0000274C Reject ", callback_data="rejecttr")
+                  ConfirmBtn = types.InlineKeyboardButton(text= "\U00002705 Confirm ", callback_data="confirmtr")
+                  ConfirmRejectKeyboard.add(RejectBtn,ConfirmBtn)
+                  bot.send_message(config.tg, text="*Creator:* " + tcreator + "\n*Destination:* " + tdest + "\n*ID:* " + tid + "\n*Value:* " + str(tvalue) + " \U0001F48E",parse_mode="Markdown",reply_markup=ConfirmRejectKeyboard)
                   w.write(tid + "\n")
                   w.close()
       except:
@@ -102,6 +117,32 @@ def NewTransMonitoring():
     else:
       time.sleep(10)
       tmr += 10
+
+##
+RejectedKeyboard = types.InlineKeyboardMarkup()
+RejectedBtn = types.InlineKeyboardButton(text= "\U0000274C Rejected \U0000274C", callback_data="rejectedtr")
+RejectedKeyboard.add(RejectedBtn)
+
+WaitKeyboard = types.InlineKeyboardMarkup()
+WaitBtn = types.InlineKeyboardButton(text= "\U000023F3 Confirmation in progress \U000023F3", callback_data="waittr")
+WaitKeyboard.add(WaitBtn)
+
+ConfirmedKeyboard = types.InlineKeyboardMarkup()
+ConfirmedBtn = types.InlineKeyboardButton(text= "\U00002705 Confirmed \U00002705", callback_data="confirmedtr")
+ConfirmedKeyboard.add(ConfirmedBtn)
+
+### call data
+@bot.callback_query_handler(func = lambda call: True)
+def inlinekeyboards(call):
+  if call.from_user.id == config.tg:
+    if call.data == "rejecttr":
+      bot.edit_message_reply_markup(config.tg, message_id=call.message.message_id, reply_markup=RejectedKeyboard)
+    if call.data == "confirmtr":
+      tid = str(call.message.text.split()[5])
+      bot.edit_message_reply_markup(config.tg, message_id=call.message.message_id, reply_markup=WaitKeyboard)
+      cnfrmbtn(tid)
+      bot.edit_message_reply_markup(config.tg, message_id=call.message.message_id, reply_markup=ConfirmedKeyboard)
+##
 
 NewTransMonitoring = threading.Thread(target = NewTransMonitoring)
 NewTransMonitoring.start()
