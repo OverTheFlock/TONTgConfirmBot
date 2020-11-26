@@ -23,7 +23,7 @@ $ cd $HOME && cd ./tontgconfirmbot && git pull && chmod +x ./install.sh && ./ins
 
 ## Confirmation
 
-When bot send you information about new transaction, just reply to him with simple command /confirm ID
+When bot send you information about new transaction, tap Confirm or just reply to him with simple command /confirm ID
 
 Example:
 
