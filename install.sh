@@ -31,7 +31,7 @@ clear >$(tty)
 # New installation 
 if [ ! -f ./config.py ]; then
     # Tg id
-    printf "\nRuning new installation\n\nPlease, provide your telegram id. You can get it by sending command /id to bot @TONTgIDBot\n"
+    printf "\nRuning new installation\n\nPlease, provide your telegram id. You can get it by sending command /getid to bot @myidbot\n"
     read -p 'Telegram ID: ' itg
     itgcheck='^[0-9]{1}+$'
     while [[ ! $itg =~ $itgcheck ]]
