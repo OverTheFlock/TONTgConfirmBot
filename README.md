@@ -27,6 +27,12 @@ When bot send you information about new transaction, tap Confirm or just reply t
 
 Example:
 
+
+![screen](https://i.ibb.co/ZNKSbDd/photo-2020-11-26-21-04-02.jpg)
+![screen](https://i.ibb.co/Vm8Dbnt/photo-2020-11-26-21-04-03.jpg)
+![screen](https://i.ibb.co/bNs4v1P/photo-2020-11-26-21-04-01.jpg)
+
+Manual confirmation command example 
 /confirm 0x5f19e9eceb3585c1
 
 ## Donate
