@@ -2,7 +2,7 @@
 
 sudo apt update
 sudo apt -y install python3-pip
-pip3 install --upgrade pyTelegramBotAPI
+pip3 install --upgrade pyTelegramBotAPI==3.7.2
 
 
 # bot directory
